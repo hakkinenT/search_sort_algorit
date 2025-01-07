@@ -13,44 +13,32 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class DesafioAlgoritmoTime {
     public static void main(String[] args) {
 
-        String[] names = creatArrayFromFile();
+        String[] names = creatArrayFromFile("input.json");
         String[] bubbleArray = names.clone();
         String[] insertionArray = names.clone();
         String[] quickArray = names.clone();
 
+        long timeBubble = bubbleSortExecution(bubbleArray);
 
+        long timeInsertion = insertionSortExecution(insertionArray);
 
-        Instant bubbleStart = Instant.now();
-        bubbleSort(bubbleArray);
-        Instant bubbleEnd = Instant.now();
-        long timeBubble = Duration.between(bubbleStart, bubbleEnd).toMillis();
+        long timeQuick = quickSortExecution(quickArray);
 
-        Instant insertionStart = Instant.now();
-        insertionSort(insertionArray);
-        Instant insertionEnd = Instant.now();
-        long timeInsertion = Duration.between(insertionStart, insertionEnd).toMillis();
-
-        Instant quickStart = Instant.now();
-        quickSort(quickArray);
-        Instant quickEnd = Instant.now();
-        long timeQuick = Duration.between(quickStart, quickEnd).toMillis();
-
-        System.out.printf("Insertion Sort: %dms\n", timeInsertion);
-        System.out.printf("Bubble Sort: %dms\n", timeBubble);
-        System.out.printf("Quick Sort: %dms\n", timeQuick);
+        System.out.printf("Insertion sort: %dms\n", timeInsertion);
+        System.out.printf("Bubble sort: %dms\n", timeBubble);
+        System.out.printf("Quick sort: %dms\n", timeQuick);
 
         
     }
 
-    private static String[] creatArrayFromFile() {
+    private static String[] creatArrayFromFile(String path) {
         ObjectMapper objectMapper = new ObjectMapper();
         List<String> inputs = new ArrayList<>();
 
         try {
-            File jsonFile = new File("input.json");
+            File jsonFile = new File(path);
             inputs = objectMapper.readValue(jsonFile, new TypeReference<List<String>>() {});
 
-            
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,7 +48,15 @@ public class DesafioAlgoritmoTime {
         return names;
     }
 
-    public static <T extends Comparable<T>> T[] bubbleSort(T[] nums) {
+    private static long bubbleSortExecution(String[] bubbleArray) {
+        Instant bubbleStart = Instant.now();
+        bubbleSort(bubbleArray);
+        Instant bubbleEnd = Instant.now();
+        long timeBubble = Duration.between(bubbleStart, bubbleEnd).toMillis();
+        return timeBubble;
+    }
+
+    private static <T extends Comparable<T>> T[] bubbleSort(T[] nums) {
         int N = nums.length;
         for (int i = 0; i < N; i++) {
             boolean swapped = false;
@@ -79,7 +75,15 @@ public class DesafioAlgoritmoTime {
         return nums;
     }
 
-    public static <T extends Comparable<T>> T[] insertionSort(T[] array) {
+    private static long insertionSortExecution(String[] insertionArray) {
+        Instant insertionStart = Instant.now();
+        insertionSort(insertionArray);
+        Instant insertionEnd = Instant.now();
+        long timeInsertion = Duration.between(insertionStart, insertionEnd).toMillis();
+        return timeInsertion;
+    }
+
+    private static <T extends Comparable<T>> T[] insertionSort(T[] array) {
         int N = array.length;
         for (int i = 1; i < N; i++) {
             T aux = array[i];
@@ -93,7 +97,15 @@ public class DesafioAlgoritmoTime {
         return array;
     }
 
-    public static <T extends Comparable<T>> T[] quickSort(T[] nums) {
+    private static long quickSortExecution(String[] quickArray) {
+        Instant quickStart = Instant.now();
+        quickSort(quickArray);
+        Instant quickEnd = Instant.now();
+        long timeQuick = Duration.between(quickStart, quickEnd).toMillis();
+        return timeQuick;
+    }
+
+    private static <T extends Comparable<T>> T[] quickSort(T[] nums) {
         quickSortTailRecursive(nums, 0, nums.length - 1);
         return nums;
     }
